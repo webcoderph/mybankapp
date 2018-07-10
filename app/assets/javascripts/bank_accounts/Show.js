@@ -5,8 +5,10 @@ var Show = (function(){
   var $amount;
   var $tType;
   var $parameters;
-  
-  var account_id;
+  var $notification;
+
+  var bank_account_id;
+  var url = "/api/v1/bank_accounts/new_transaction";
 
   var disableBtns = function() {
     $btnSave.prop("disabled", true);
@@ -17,7 +19,7 @@ var Show = (function(){
   var enableBtns = function() {
     $btnSave.prop("disabled", false);
     $amount.prop("disabled", false);
-    $ttransaction.prop("disabled", false);
+    $tType.prop("disabled", false);
   };
 
   var fetch = function(){
@@ -27,8 +29,8 @@ var Show = (function(){
     $amount            = $("#amount");
     $tType             = $("#t-type");
     $parameters        = $("#parameters");
-
-    account_id         = $parameters.data("bank-account-id");
+    $notification      = $(".notification");
+    bank_account_id         = $parameters.data("bank-account-id");
   };
 
   var events = function(){
@@ -40,7 +42,26 @@ var Show = (function(){
       var amount = $amount.val();
       var tType  = $tType.val();
       disableBtns();
-      console.log("Amount: " + amount + "Type: " + tType + "Account Id: " + account_id);
+     
+      $notification.html("");
+
+      $.ajax({
+        url: url,
+	method: 'POST',
+	dataType: 'json',
+	data: {
+	  amount: amount,
+	  transaction_type: tType,
+	  bank_account_id: bank_account_id
+	},
+	success: function(response) {
+	  window.location.href = "/bank_accounts/" + bank_account_id
+	},
+	error: function(response){
+	  $notification.html(JSON.parse(response.responseText).errors.join());
+	  enableBtns();
+	}
+      });
     });
   };
 
