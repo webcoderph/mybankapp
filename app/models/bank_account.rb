@@ -1,4 +1,6 @@
 class BankAccount < ApplicationRecord
+  belongs_to :client
+
   before_validation :load_defaults
   
   validates :client, presence: true
@@ -6,8 +8,6 @@ class BankAccount < ApplicationRecord
   validates :balance, presence: true 
   validates_uniqueness_of :account_no, case_sensitive: false
   validates_numericality_of :balance
-  
-  belongs_to :client
 
   def to_s
     account_no

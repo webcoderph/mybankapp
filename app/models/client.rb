@@ -1,4 +1,6 @@
 class Client < ApplicationRecord
+  has_many :bank_accounts
+
   before_save :format_name
 
   validates :first_name, presence: true
@@ -6,8 +8,6 @@ class Client < ApplicationRecord
   validates :last_name, presence: true
   validates :client_no, presence: true
   validates_uniqueness_of :client_no, case_sensitive: false
-
-  has_many :bank_accounts
 
   def to_s
     "#{last_name}, #{first_name} #{middle_name}"
