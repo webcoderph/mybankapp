@@ -1,5 +1,6 @@
 class BankAccount < ApplicationRecord
   belongs_to :client
+  has_many :account_transactions
 
   before_validation :load_defaults
   
