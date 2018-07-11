@@ -9,18 +9,18 @@ module BankAccounts
 
     def execute!
       ActiveRecord::Base.transaction do 
-			  AccountTransaction.create!(
-          bank_account: @bank_account,
-	        amount: @amount,
-	        transaction_type: @transaction_type
-        )
+        AccountTransaction.create!(
+	  bank_account: @bank_account,
+	  amount: @amount,
+	  transaction_type: @transaction_type
+	)  
 
         if @transaction_type == "withdraw"
-          @bank_acount.update!(balance: @bank_account.balance - @amount)
-        elsif @transaction_type == "deposit"
-	        @bank_account.update!(balance: @bank_account.balance + @amount)
-        end
-			end
+	  @bank_account.update!(balance: @bank_account.balance - @amount)
+	elsif @transaction_type == "deposit"
+	  @bank_account.update!(balance: @bank_account.balance + @amount)
+	end
+      end
 
       @bank_account
     end
